@@ -1,2 +1,2 @@
 # django-cache
-an example of caching in django
+an example of caching and sorting in django
