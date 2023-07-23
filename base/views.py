@@ -7,6 +7,8 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from .models import Book
 
+
+#caching 
 def get_books(request):
     # Check if the data is already cached
     cached_books = cache.get('cached_books')
@@ -38,7 +40,10 @@ def case_insensitive_sorting(request):
     books_data = [{'title': book.title, 'author': book.author,'publication_year':book.publication_year} for book in books]
     return JsonResponse(books_data,safe=False)
 
-
-
+#random sorting
+def random_sorted_books(request):
+   books = Book.objects.order_by('?')
+   books_data = [{'title': book.title, 'author': book.author,'publication_year':book.publication_year} for book in books]
+   return JsonResponse(books_data,safe=False)
 
 
