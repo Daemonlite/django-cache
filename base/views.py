@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models.functions import Lower
 
 # Create your views here.
 
@@ -27,6 +28,13 @@ def get_books(request):
 #Sorting by Multiple Fields
 def sortMultipleBooks(request):
     books = Book.objects.order_by('author', '-publication_year')
+    books_data = [{'title': book.title, 'author': book.author,'publication_year':book.publication_year} for book in books]
+    return JsonResponse(books_data,safe=False)
+
+
+#Sorting with Case-Insensitive Order:
+def case_insensitive_sorting(request):
+    books = Book.objects.order_by(Lower('title'))
     books_data = [{'title': book.title, 'author': book.author,'publication_year':book.publication_year} for book in books]
     return JsonResponse(books_data,safe=False)
 
