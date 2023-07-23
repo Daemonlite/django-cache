@@ -13,10 +13,24 @@ def get_books(request):
         return JsonResponse(cached_books, safe=False)
 
     # If not cached, retrieve the books from the database
-    books = Book.objects.all()
-    books_data = [{'title': book.title, 'author': book.author} for book in books]
+    # also sort the books according to the publication year
+    #use (-publication_year) for descending order
+    books =  Book.objects.order_by('publication_year')
+    books_data = [{'title': book.title, 'author': book.author,'publication_year':book.publication_year} for book in books]
 
-    # Cache the data for 20 minutes (1,200 seconds)
-    cache.set('cached_books', books_data, timeout=1200)
+
+    # Cache the data for 2 minutes (120 seconds)
+    cache.set('cached_books', books_data, timeout=120)
 
     return JsonResponse(books_data, safe=False)
+
+#Sorting by Multiple Fields
+def sortMultipleBooks(request):
+    books = Book.objects.order_by('author', '-publication_year')
+    books_data = [{'title': book.title, 'author': book.author,'publication_year':book.publication_year} for book in books]
+    return JsonResponse(books_data,safe=False)
+
+
+
+
+
